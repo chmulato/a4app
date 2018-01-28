@@ -1,0 +1,66 @@
+<h1>Angular 2/4 Exemplo de CRUD</h1>
+<h3 *ngIf="articleIdToUpdate; else create"> 
+   Atualizar Artigo pelo Id: {{articleIdToUpdate}}
+</h3>
+<ng-template #create>
+   <h3> Criar Novo Artigo </h3>
+</ng-template>
+<div>
+ <form [formGroup]="articleForm" (ngSubmit)="onArticleFormSubmit()">
+  <table>
+    <tr><td>Entrar Título</td><td><input formControlName="title">
+	       <label *ngIf="articleForm.get('title').invalid && processValidation" [ngClass] = "'error'"> Título é requerido. </label>
+   	</td></tr>
+    <tr><td>Entrar Categoria</td><td><input formControlName="category">
+	       <label *ngIf="articleForm.get('category').invalid && processValidation" [ngClass] = "'error'"> Categoria é requerido. </label>
+	</td></tr>	
+    <tr><td colspan="2">
+	    <button *ngIf="!articleIdToUpdate">Inserir</button>  
+		  <button *ngIf="articleIdToUpdate">Atualizar</button>  
+	    <button (click)="backToCreateArticle()" *ngIf="articleIdToUpdate">Retornar</button>  
+	</td></tr>
+  </table>
+ </form> 
+ <br/>
+ <div *ngIf="statusCode; else processing">
+   <div *ngIf="statusCode === 201" [ngClass] = "'success'">
+    Artigo adicionado com sucesso.
+   </div>   
+   <div *ngIf="statusCode === 409" [ngClass] = "'success'">
+    Artigo já existente.
+   </div>   	
+   <div *ngIf="statusCode === 200" [ngClass] = "'success'">
+    Artigo atualizado com sucesso.
+   </div>   	      
+   <div *ngIf="statusCode === 204" [ngClass] = "'success'">
+    Artigo deletado com sucesso.
+   </div>   	   
+   <div *ngIf="statusCode === 500" [ngClass] = "'error'">
+        Erro Interno no Servidor!
+   </div>	
+ </div>
+ <ng-template #processing>
+	<img *ngIf="requestProcessing" src="assets/images/loading.gif">
+ </ng-template>
+</div>
+<h3>Detalhe do Artigo</h3>
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Título</th>
+    <th>Categoria</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let article of allArticles" >
+    <td>{{article.articleId}}</td>
+    <td>{{article.title}}</td>
+    <td>{{article.category}}</td>
+    <td>
+      <button type="button" (click)="loadArticleToEdit(article.articleId)">Editar</button>
+    </td> 
+    <td>
+      <button type="button" (click)="deleteArticle(article.articleId)">Deletar</button>
+    </td>
+  </tr>
+</table>
