@@ -43,7 +43,7 @@ export class ArticleService {
     updateArticle(article: Article):Observable<number> {
 	    let cpHeaders = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: cpHeaders });
-		return this.http.put(this.articleUrl +"/"+ article.articleId, article, options)
+		return this.http.put(this.articleUrl, article, options)
 			.map(success => success.status).catch(this.handleError);
 	}
 	
